@@ -19,3 +19,16 @@ Use Python-style function calls with short comments explaining your reasoning, l
   # .tmp is junk → safe to delete
   delete_file("temp_file.tmp")
 ]
+
+Return the final plan as a Python list of stringified function calls, like:
+
+[
+  "delete_file('temp.tmp')",
+  "create_folder('Source')",
+  "move_file('main.py', 'Source/main.py')"
+]
+
+Do not include markdown or explanations.
+
+
+MAIN THING TO REMEMBER: Respond with a Python list of strings, where each string is a function call (e.g., "move_file('a', 'b')").
