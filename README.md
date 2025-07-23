@@ -113,7 +113,7 @@ that's going to be pushed to your docker container.
 In a new terminal run
 
 ```bash
-./setup_agent.sh
+./scripts/setup_agent.sh
 ```
 
 This builds the Docker container with the necessary tools the agent needs.
@@ -121,7 +121,7 @@ This builds the Docker container with the necessary tools the agent needs.
 Now, inside of the container we can run 
 
 ```bash
-./start_agent.sh
+./scripts/start_agent.sh
 ```
 
 This clones the dataset from Hugging Face and builds it out to the way we need it.
