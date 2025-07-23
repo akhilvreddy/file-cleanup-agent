@@ -6,8 +6,11 @@ WORKDIR /app
 # copy full project into container
 COPY . .
 
+# we need git
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+
 # python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # data cloning
-CMD ["python", "generate_data.py", "docker"]
+CMD ["python", "data/generate_data.py", "docker"]
