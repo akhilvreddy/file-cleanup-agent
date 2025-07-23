@@ -22,7 +22,7 @@ What It Does
 
 ## Example output
 
-Here's what the original "dataset" looked like 
+Here's what the original "dataset" looked like (you'll see this exact thing on hugging face)
 
 ```txt
 messy-dataset/
@@ -76,46 +76,23 @@ messy-dataset/
 ```
 
 Here's a snippet of what the agent returned in "dry-run" mode
-```py
-print(hi)
-```
 
-And here's what the directory looked like after the cleanup
+![pic1](./assets/agent1.png)
 
-```txt
-messy-dataset/
-├── main.py
-├── app.java
-├── README
-├── .DS_Store
-├── notes.txt
-├── temp.tmp
-├── build/
-│   ├── debug.log
-│   ├── app.class
-│   ├── old_build/
-│   │   ├── unused.o
-│   │   └── trace.bak
-│   └── .env.local
-├── data/
-│   ├── dataset1.csv
-│   ├── backup/
-│   │   ├── dataset1_copy.csv
-│   │   └── temp.csv~
-│   ├── corrupted.txt
-│   └── .ipynb_checkpoints/
-│       └── dataset1-checkpoint.csv
-├── scripts/
-│   ├── hello.js
-│   ├── hello.py
-│   ├── hello.java
-│   ├── calc.rs
-│   ├── test.cpp
-│   ├── .gitkeep
-│   └── scratch/
-│       ├── temp_script.py
-│       └── notes.md
-```
+Okay so that's good. The LLM "brain" scanned the root layer and could easily point out things that could go where they needed to. 
+
+But it's missing the ability to go into each subdir recursively and checking in there too → we have to change our prompt.
+
+Here's it after another trial run
+
+![pic2](./assets/agent2.png)
+
+Even though we have a very smart LLM, we would have to do this in steps because it doesn't catch everything at once. Given better context and data formatting, maybe we could've zero-shot this but it's not that necessary as long as you have a loop for your agent and are feeding back in memory at every step.
+
+Finally, after setting `dry_run=False`, I got the following
+
+![pic3](./assets/agent3.png)
+
 
 ---
 
@@ -125,13 +102,31 @@ messy-dataset/
 
 ## Running the agent (in docker)
 
+First make sure you have your API key. I set mine in current bash session and passed that into docker (as I did above). You can verify by doing
+
+```bash
+$OPENAI_API_KEY
+```
+
+that's going to be pushed to your docker container. 
+
+In a new terminal run
+
 ```bash
 ./setup_agent.sh
 ```
 
-This 1) Builds the Docker container and 2) Clones and prepares the dataset at the root.
+This builds the Docker container with the necessary tools the agent needs.
 
-Then inside of docker we can run 
+Now, inside of the container we can run 
+
+```bash
+./start_agent.sh
+```
+
+This clones the dataset from Hugging Face and builds it out to the way we need it.
+
+To run your agent
 
 ```py
 python run.py
@@ -141,7 +136,7 @@ python run.py
 
 ## Use by yourself
 
-You can repeat the same steps as above but you just need an LLM API key. I used OpenAI but you can use anything else that you want.
+You can do this on any directory you have! Just change the `target_dir` in `run.py`. I used OpenAI's API but you can use anything else that you want.
 
 Add your API key
 
